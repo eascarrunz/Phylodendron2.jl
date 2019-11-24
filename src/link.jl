@@ -53,8 +53,8 @@ end # function unlink!
 
 
 """
-    graft!(p, q, r [, prop_brlengths=(0.5, 0.5)])
-    graft!(p, q, r [, prop_brlength=0.5])
+    graft!(p, q, r; prop_brlengths=(0.5, 0.5))
+    graft!(p, q, r; prop_brlength=0.5)
 
 Insert node `p` between the nodes `q` and `r`, where `q` and `r` are neighbours.
 
@@ -71,7 +71,7 @@ function graft!(
 
     unlink!(q, r)
     link!(q, p, br_qp)
-    link!(q, r, br_pr)
+    link!(p, r, br_pr)
     
     return nothing
 end # function graft!
@@ -81,7 +81,7 @@ function graft!(
     q::AbstractNode,
     r::AbstractNode,
     prop_qp::Float64 = 0.5;
-    f::Function = Branch
+    f::Union{Function, DataType} = Branch
     )
     
     @assert 0.0 ≤ prop_qp ≤ 1.0
@@ -90,8 +90,8 @@ function graft!(
         link!(q, p, f(br0.length * prop_qp))
         link!(p, r, f(br0.length * (1.0 - prop_qp)))
     else
-        link!(q, p)
-        link!(p, r)
+        link!(q, p, f())
+        link!(p, r, f())
     end
     
     return nothing
@@ -107,15 +107,15 @@ function pluck!(
     p::AbstractNode,
     q::AbstractNode,
     r::AbstractNode,
-    f::Function = Branch
+    f::Union{Function, DataType} = Branch
     )
     br_pq = unlink!(p, q)
     br_pr = unlink!(p, r)
 
     if isnothing(br_pq.length) || isnothing(br_pr.length)
-        br_qr = link!(q, r, f(br_pq.length + br_pr.length))
-    else
         br_qr = link!(q, r)
+    else
+        br_qr = link!(q, r, f(br_pq.length + br_pr.length))
     end
 
     sizehint!(br_qr.datablocks, length(br_pq.datablocks))
