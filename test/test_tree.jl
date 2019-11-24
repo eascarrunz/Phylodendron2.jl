@@ -118,6 +118,10 @@ end
     @testset "Preorder" begin
         @test preorder_vector(tree) ==
             [a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t]
+        @test collect(preorder(tree)) ==
+            [
+                (a, a),(a, b),(b, c),(c, d),(d, e),(e, f),(f, g),(f, h),(e, i),(i, j),(j, k),(i, l),(i, m),(c, n),(n, o),(o, p),(o, q),(n, r),(r, s),(r, t)
+            ]
         @test preorder_vector(e, d) == [d, c, b, a, n, o, p , q, r, s, t]
         @test preorder_vector(d, e) == [e, f, g, h, i, j, k, l, m]
         @test preorder_vector(f) ==
@@ -127,6 +131,10 @@ end
     @testset "Postorder" begin
         @test postorder_vector(tree) ==
             [t, s, r, q, p, o, n, m, l, k, j, i, h, g, f, e, d, c, b, a]
+        @test collect(postorder(tree)) ==
+            [
+                (r, t), (r, s), (n, r), (o, q), (o, p), (n, o), (c, n), (i, m), (i, l), (j, k), (i, j), (e, i), (f, h), (f, g), (e, f), (d, e), (c, d), (b, c), (a, b), (a, a)
+            ]
         @test postorder_vector(e, d) == [t, s, r, q, p, o, n, a, b, c, d]
         @test postorder_vector(d, e) == [m, l, k, j, i, h, g, f, e]
         @test_throws Phylodendron2.InvalidTopology postorder(a, f)

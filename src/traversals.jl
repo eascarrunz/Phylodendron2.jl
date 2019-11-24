@@ -88,7 +88,7 @@ function preorder_vector(p::AbstractNode, q::AbstractNode)
     return _prevec!(v, p, q)
 end
 preorder_vector(p::AbstractNode) = preorder_vector(p, p)
-preorder_vector(t::AbstractTree) = preorder_vector(t.start, t.start)
+preorder_vector(t::AbstractTree) = preorder_vector(t.start)
 
 
 #####################
@@ -184,4 +184,4 @@ function postorder_vector(p::AbstractNode, q::AbstractNode)
     return _postvec!(v, p, q)
 end
 postorder_vector(p::AbstractNode) = postorder_vector(p, p)
-postorder_vector(t::AbstractTree) = postorder_vector(t.start, t.start)
+postorder_vector(t::AbstractTree) = postorder_vector(t.start)
