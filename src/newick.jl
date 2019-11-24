@@ -164,7 +164,7 @@ function read_newick(filename::AbstractString; nhint::Int=1000)::Vector{Abstract
     close(file)
 
     treecount < 1 && @error "No trees were found in the file."
-    sizehint!(intrees, treecount)
+    resize!(intrees, treecount)
 
     return intrees
 end
