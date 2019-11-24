@@ -1,5 +1,7 @@
 const TRAVERSAL_VECTOR_PRESIZE = 1000
 
+# TODO: Replace the lazy loop-based methods of the iterator interface with recursion-based methods. This is significantly faster and uses less memory.
+
 #####################
 #
 # Preorder iterator
