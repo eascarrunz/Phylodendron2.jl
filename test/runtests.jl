@@ -5,4 +5,5 @@ using Test
     include("species_directory.jl")
     include("test_tree.jl")
     include("newick.jl")
+    include("randtree.jl")
 end

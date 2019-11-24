@@ -17,18 +17,18 @@ function label!(p::AbstractNode, v::String)
 end
 
 """
-	species(node)
+	getspecies(node)
 
 Get the number of the species assigned to `node`.
 """
-species(p) = p.species
+getspecies(p) = p.species
 
 """
-	species!(node, i)
+	setspecies!(node, i)
 
 Assign the species number `i` to `node`.
 """
-function species!(p::AbstractNode, i::Int)
+function setspecies!(p::AbstractNode, i::Int)
 	p.species = i
 
 	return nothing

@@ -1,10 +1,13 @@
 #=
-This code is released under public domain.
 
-It is not required that you give credit to the author, but if you use this software for scientific purposes, it is good practice to make the source code available with a link to a stable repository.
+There are redundant exports in this file because it is also used to keep track of where different methods come from. Each source file inclusion should be followed by an export statement with an alphabetic list of all the exported functions with a method that comes from that file. Please keep this format.
+
 =#
 
 module Phylodendron2
+
+using Random: randperm
+using DataStructures: Deque
 
 include("exceptions.jl")
 
@@ -45,8 +48,8 @@ export
     deannotate!,
     label,
     label!,
-    species,
-    species!
+    getspecies,
+    setspecies!
 
 include("peek_topology.jl")
 export
@@ -74,7 +77,10 @@ export
     isrooted,
     label,
     label!,
-    origin
+    origin,
+    origin!,
+    root!,
+    unroot!
 
 include("show.jl")
 
@@ -111,5 +117,9 @@ export
     parse_newick,
     read_newick,
     write_newick
+
+include("randtree.jl")
+export
+    randtree
 
 end # module Phylodendron2

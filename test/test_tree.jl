@@ -52,9 +52,9 @@ tree = Tree(a)
     label!(a, "Foo")
     @test label(a) == "Foo"
     label!(a, "A")
-    @test species(a) == species(b) == 0
-    species!(a, 1)
-    @test species(a) == 1
+    @test getspecies(a) == getspecies(b) == 0
+    setspecies!(a, 1)
+    @test getspecies(a) == 1
     annotate!(a, "Bootstrap", 0.95)
     @test annotation(a, "Bootstrap") == 0.95
     deannotate!(a, "Bootstrap")
@@ -72,6 +72,7 @@ end
     @test brlength(a, b) == 4.465957012470789
     brlength!(a, b, nothing)
     @test isnothing(brlength(a, b))
+    brlength!(a, b, 4.465957012470789)
     @test_throws Phylodendron2.InvalidTopology brlength(a, e)
 end
 
@@ -79,6 +80,14 @@ end
     @test label(tree) == ""
     label!(tree, "Tree")
     @test label(tree) == "Tree"
+    @test origin(tree) == a
+    root!(tree, c)
+    @test isrooted(tree)
+    @test origin(tree) == c
+    unroot!(tree)
+    @test ! isrooted(tree)
+    @test origin(tree) == c
+    origin!(tree, a)
     @test origin(tree) == a
     annotate!(a, "Posterior probability", 0.95)
     @test annotation(a, "Posterior probability") == 0.95
@@ -137,6 +146,33 @@ end
     @test n_branch(c, n) == 6
     @test n_branch(c, b) == 1
     @test n_branch(h, f) == 18
+end
+
+@testset "Grafting and plucking" begin
+    x = Node()
+    brlen0 = brlength(a, b)
+    graft!(x, a, b, 0.4)
+    @test neighbours(x) == [a, b]
+    @test neighbours(a) == [x]
+    @test neighbours(b) == [c, x]
+    @test brlength(a, x) == 0.4 * brlen0
+    @test brlength(x, b) == 0.6 * brlen0
+    pluck!(x, a, b)
+    @test neighbours(x) == Node[]
+    @test neighbours(a) == [b]
+    @test neighbours(b) == [c, a]
+    @test brlength(a, b) == brlen0
+    brax = Branch(nothing)
+    brxb = Branch(0.1)
+    graft!(x, a, b, brax, brxb)
+    @test neighbours(x) == [a, b]
+    @test neighbours(a) == [x]
+    @test neighbours(b) == [c, x]
+    @test isnothing(brlength(a, x))
+    @test brlength(x, b) == 0.1
+    pluck!(x, a, b)
+    @test isnothing(brlength(a, b))
+    brlength!(a, b, brlen0)
 end
 
 @testset "Node paths and distances" begin

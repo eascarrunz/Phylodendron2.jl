@@ -6,11 +6,54 @@ Return `true` if the `tree` is rooted.
 isrooted(tree::AbstractTree) = tree.rooted
 
 """
+	root!(tree)
+
+Set a `tree` as rooted. The origin node of the tree is set as the root.
+"""
+function root!(tree::AbstractTree)
+	tree.rooted = true
+
+	return nothing
+end
+
+"""
+	root!(tree, node)
+
+Set `node` as the root of a `tree`.
+"""
+function root!(tree::AbstractTree, p::AbstractNode)
+	tree.start = p
+	root!(tree)
+
+	return nothing
+end
+
+"""
+	unroot!(tree)
+
+Set a `tree` as unrooted.
+"""
+function unroot!(tree::AbstractTree)
+	tree.rooted = false
+
+	return nothing
+end
+
+"""
 	origin(tree)
 
-Return the "origin" of a `tree`: The node that serves as the default point of entrance to the tree
+Return the "origin" of a `tree`: The node that serves as the default point of entry to the tree.
 """
 origin(tree::AbstractTree) = tree.start
+
+"""
+	origin!(tree, node)
+
+Set `node` as the "origin" of `tree`. The origin of the tree serves as a "pseudoroot": the default point of entry to the tree.
+"""
+function origin!(tree::AbstractTree, p::AbstractNode)
+	tree.start = p
+end
 
 """
 	label(tree)
