@@ -47,7 +47,7 @@ end # function Base.show
 
 function Base.show(io::IO, ::MIME"text/plain", p::AbstractNode)
     if length(p.label) == 0
-        print(io, "Tree")
+        print(io, "Node")
     else
         print(io, "Node \"", p.label, "\"")
     end
