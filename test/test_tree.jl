@@ -92,6 +92,8 @@ end
     @test nodelabels(tree) == string.('A':'T')
     @test nodelabels(n, o) == ["O", "P", "Q"]
     @test tiplabels(tree) == ["A", "G", "H", "K", "L", "M", "P", "Q", "S", "T"]
+    @test find_nonsplitting(tree) == [b, d, j]
+    @test tips(tree) == [a, g, h, k, l, m, p, q, s, t]
 end
 
 @testset "Species directories" begin
@@ -191,6 +193,22 @@ end
     pluck!(x, a, b)
     @test isnothing(brlength(a, b))
     brlength!(a, b, brlen0)
+end
+
+@testset "More topological manipulation" begin
+    tree2 = deepcopy(tree)
+    origin2 = origin(tree2)
+    pluck_nonsplitting!(tree2)
+    @test find_nonsplitting(tree2) == []
+    @test origin(tree2) == origin2
+    tree2 = deepcopy(tree)
+    origin2 = origin(tree2)
+    neworigin = find_nonsplitting(tree2)[1]
+    lastorigin = neighbours(neworigin)[1]
+    origin!(tree2, neworigin)
+    pluck_nonsplitting!(tree2)
+    @test find_nonsplitting(tree2) == []
+    @test origin(tree2) == lastorigin
 end
 
 @testset "Node paths and distances" begin

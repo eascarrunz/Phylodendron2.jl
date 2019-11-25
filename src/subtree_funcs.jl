@@ -14,8 +14,8 @@ end
 Count the nodes in a tree or subtree denoted by the nodes `p` and `q`.
 """
 n_node(p::AbstractNode, q::AbstractNode) = _n_node!(0, p, q)
-n_node(p::AbstractNode) = _n_node!(0, p, p)
-n_node(tree::AbstractTree) = n_node(tree.start, tree.start)
+n_node(p::AbstractNode) = n_node(p, p)
+n_node(tree::AbstractTree) = n_node(tree.start)
 
 function _n_tip!(num::Int, p::AbstractNode, q::AbstractNode)
 	for link in q.links
@@ -33,8 +33,8 @@ end
 Count the tip nodes in a tree or subtree denoted by the nodes `p` and `q`.
 """
 n_tip(p::AbstractNode, q::AbstractNode) = _n_tip!(0, p, q)
-n_tip(p::AbstractNode) = _n_tip!(0, p, p)
-n_tip(tree::AbstractTree) = n_tip(tree.start, tree.start)
+n_tip(p::AbstractNode) = n_tip(p, p)
+n_tip(tree::AbstractTree) = n_tip(tree.start)
 
 """
 	n_branch(tree)
@@ -44,7 +44,7 @@ Count the branches in a `tree` or subtree denoted by the nodes `p` and `q`.
 """
 n_branch(p::AbstractNode, q::AbstractNode) = n_node(p, q) - 1
 n_branch(p::AbstractNode) = n_branch(p, p)
-n_branch(tree::AbstractTree) = n_branch(tree.start, tree.start)
+n_branch(tree::AbstractTree) = n_branch(tree.start)
 
 
 function _nodelabels!(labs::Vector{String}, p::AbstractNode, q::AbstractNode)
