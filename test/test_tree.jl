@@ -76,6 +76,31 @@ end
     @test_throws Phylodendron2.InvalidTopology brlength(a, e)
 end
 
+@testset "Subtree functions" begin
+    @test n_node(tree) == 20
+    @test n_node(c, n) == 7
+    @test n_node(c, b) == 2
+    @test n_node(h, f) == 19
+    @test n_tip(tree) == 10
+    @test n_tip(c, n) == 4
+    @test n_tip(c, b) == 1
+    @test n_tip(h, f) == 9
+    @test n_branch(tree) == 19
+    @test n_branch(c, n) == 6
+    @test n_branch(c, b) == 1
+    @test n_branch(h, f) == 18
+    @test nodelabels(tree) == string.('A':'T')
+    @test nodelabels(n, o) == ["O", "P", "Q"]
+    @test tiplabels(tree) == ["A", "G", "H", "K", "L", "M", "P", "Q", "S", "T"]
+end
+
+@testset "Species directories" begin
+    dir = SpeciesDirectory(tiplabels(tree))
+    @test dir.list == tiplabels(tree)
+    @test length(dir.dict) == length(dir.list)
+    setspecies!(tree, dir)
+end
+
 @testset "Tree properties" begin
     @test label(tree) == ""
     label!(tree, "Tree")
@@ -141,21 +166,6 @@ end
     end
 end
 
-@testset "Count nodes and branches" begin
-    @test n_node(tree) == 20
-    @test n_node(c, n) == 7
-    @test n_node(c, b) == 2
-    @test n_node(h, f) == 19
-    @test n_tip(tree) == 10
-    @test n_tip(c, n) == 4
-    @test n_tip(c, b) == 1
-    @test n_tip(h, f) == 9
-    @test n_branch(tree) == 19
-    @test n_branch(c, n) == 6
-    @test n_branch(c, b) == 1
-    @test n_branch(h, f) == 18
-end
-
 @testset "Grafting and plucking" begin
     x = Node()
     brlen0 = brlength(a, b)
@@ -203,4 +213,38 @@ end
     @test brdist(f, e) == brlength(f, e)
     @test brdist(l, k) == brlength(l, i) + brlength(i, j) + brlength(j, k)
     @test_throws Phylodendron2.InvalidTopology brdist(a, Node())
+end
+
+@testset "Bipartitions" begin
+    origin!(tree, a)
+    @test ! isinformative(Bipartition(BitArray([0, 0, 0, 0])))
+    @test isinformative(Bipartition(BitArray([0, 0, 0, 1])))
+    @test istrivial(Bipartition(BitArray([0, 1, 1, 1])))
+    @test istrivial(Bipartition(BitArray([0, 0, 0, 1])))
+    @test ! istrivial(Bipartition(BitArray([0, 0, 0, 0])))
+    @test are_compatible(
+        Bipartition(BitArray([0, 1, 1, 1])), 
+        Bipartition(BitArray([0, 1, 1, 0]))
+        )
+    @test are_conflicting(
+        Bipartition(BitArray([0, 1, 1, 0])), 
+        Bipartition(BitArray([0, 0, 1, 1]))
+        )
+    dir = SpeciesDirectory(nodelabels(tree))
+    setspecies!(tree, dir)
+    compute_bipartitions!(tree, dir)
+    v = falses(20)
+    v[14:20] .= true
+    @test getbranch(c, n).bipart.v == v
+    v = falses(20)
+    v[5:13] .= true
+    @test getbranch(d, e).bipart.v == v
+    set1 = Set(bipartitions(tree))
+    for p in preorder_vector(tree)[2:end]
+        origin!(tree, p)
+        compute_bipartitions!(tree, dir)
+        set2 = Set(bipartitions(tree))
+        @test all([x in set2 for x in set2])
+        set1 = set2
+    end
 end

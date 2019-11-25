@@ -21,6 +21,10 @@ export
     rename!,
     SpeciesDirectory
 
+include("bipartition.jl")
+export
+    Bipartition
+
 include("datablocks/types.jl")
 export
     AbstractBranchDataBlock,
@@ -80,6 +84,7 @@ export
     origin,
     origin!,
     root!,
+    setspecies!,
     unroot!
 
 include("show.jl")
@@ -98,17 +103,36 @@ export
     preorder,
     preorder_vector
 
-include("count_nodes.jl")
+include("subtree_funcs.jl")
 export
+    bipartitions,
+    find_nonsplitting,
+    getspecies,
     n_branch,
     n_node,
-    n_tip
+    n_tip,
+    nodelabels,
+    tiplabels,
+    tips
+
+include("topomanip.jl")
+export
+    pluck_nonsplitting!
 
 include("node_paths.jl")
 export
     brdist,
     nodepath,
     nodedist
+
+include("bipartition_funcs.jl")
+export
+    are_compatible,
+    are_conflicting,
+    compute_bipartitions!,
+    isinformative,
+    istrivial,
+    update_bipartition!
 
 include("lexer.jl")
 include("newick.jl")

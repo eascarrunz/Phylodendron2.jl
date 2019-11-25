@@ -19,8 +19,9 @@ mutable struct Branch <: AbstractBranch
     label::String
     annotations::Dict{String,Any}
     datablocks::Vector{AbstractBranchDataBlock}
+    bipart::Bipartition
 
-    Branch() = new(nothing, "", Dict{String,Any}(), AbstractBranchDataBlock[])
+    Branch() = new(nothing, "", Dict{String,Any}(), AbstractBranchDataBlock[], Bipartition(falses(1)))
 end # struct Branch
 
 function Branch(brlength::Union{Nothing, Float64})

@@ -103,3 +103,16 @@ function deannotate!(tree::AbstractTree, k::AbstractString)
 
 	return nothing
 end
+
+function _setspecies!(p::AbstractNode, q::AbstractNode, dir::SpeciesDirectory)
+	if label(q) ∈ dir
+		q.species = dir[label(q)]
+	end
+	for link in q.links
+		link.to == p && continue
+		_setspecies!(q, link.to, dir)
+	end
+end
+
+setspecies!(tree::AbstractTree, dir::SpeciesDirectory) =
+	_setspecies!(tree.start, tree.start, dir)
