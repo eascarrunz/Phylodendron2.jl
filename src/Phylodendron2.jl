@@ -55,6 +55,9 @@ export
     getspecies,
     setspecies!
 
+include("find.jl")
+# exports methods fot findfirst and findall
+
 include("peek_topology.jl")
 export
     areneighbours,
