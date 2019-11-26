@@ -4,61 +4,6 @@ const TRAVERSAL_VECTOR_PRESIZE = 1000
 
 #####################
 #
-# Preorder iterator
-#
-#####################
-struct PreorderIterator{T <: AbstractNode}
-    start::Tuple{T, T}
-
-    function PreorderIterator(p::T, q::T) where T <: AbstractNode
-        p == q || 
-        areneighbours(p, q) ||
-        throw(InvalidTopology("the nodes must be neighbours."))
-
-        return new{T}((p, q))
-    end
-end
-
-preorder(p::AbstractNode, q::AbstractNode) = PreorderIterator(p, q)
-preorder(p::AbstractNode) = PreorderIterator(p, p)
-preorder(t::AbstractTree) = PreorderIterator(t.start, t.start)
-
-struct PreorderIteratorState{T <: AbstractNode}
-    stack::Deque{Tuple{T,T}}
-
-    function PreorderIteratorState{T}(p::T, q::T) where T <: AbstractNode
-        obj = new(Deque{Tuple{T,T}}())
-        push!(obj.stack, (p, q))
-
-        return obj
-    end
-end
-
-@inline function _iterate(state::PreorderIteratorState)
-    isempty(state.stack) && return nothing
-    p, q = pop!(state.stack)
-    for link ∈ Iterators.reverse(q.links)
-        link.to === p && continue
-        push!(state.stack, (q, link.to))
-    end
-
-    return ((p, q), state)
-end # function _iterate
-
-## Hooks to the Base iterator interface ####
-
-Base.IteratorSize(iter::PreorderIterator) = Base.SizeUnknown()
-Base.IteratorEltype(iter::PreorderIterator) = Base.HasEltype()
-Base.eltype(iter::PreorderIterator{T}) where T = Tuple{T,T}
-
-Base.iterate(iter::PreorderIterator{T}) where T =
-    _iterate(PreorderIteratorState{T}(iter.start...))
-
-Base.iterate(iter::PreorderIterator, state::PreorderIteratorState) =
-    _iterate(state)
-
-#####################
-#
 # Preorder vector
 #
 #####################
@@ -92,70 +37,52 @@ end
 preorder_vector(p::AbstractNode) = preorder_vector(p, p)
 preorder_vector(t::AbstractTree) = preorder_vector(t.start)
 
-
 #####################
 #
-# Postorder iterator
+# Preorder iterator
 #
 #####################
 
-struct PostorderIterator{T <: AbstractNode}
-    start::Tuple{T,T}
+function _gather_preorder(list::Vector{Tuple{T,T}}, p::T, q::T) where T <: AbstractNode
+    push!(list, (p, q))
+    for link in q.links
+        link.to == p && continue
+        _gather_preorder(list, q, link.to)
+    end
 
-    function PostorderIterator(p::T, q::T) where T <: AbstractNode
-        p == q || 
-        areneighbours(p, q) ||
-        throw(InvalidTopology("the nodes must be neighbours."))
+    return list
+end
 
-        return new{T}((p, q))
+struct PreorderIterator{T <: AbstractNode}
+    list::Vector{Tuple{T,T}}
+    n::Int
+
+    function PreorderIterator(p::T, q::T) where T <: AbstractNode
+        p == q ||
+            areneighbours(p, q) ||
+            throw(InvalidTopology("the nodes must be neighbours."))
+        list = _gather_preorder(Vector{Tuple{T,T}}(), p, q)
+        new{T}(list, length(list))
     end
 end
 
-postorder(p::AbstractNode, q::AbstractNode) = PostorderIterator(p, q)
-postorder(p::AbstractNode) = PostorderIterator(p, p)
-postorder(tree::AbstractTree) = PostorderIterator(tree.start, tree.start)
-
-struct PostorderIteratorState{T <: AbstractNode}
-    stack::Deque{Tuple{T,T,Bool}}
-
-    function PostorderIteratorState{T}(p::T, q::T) where T <: AbstractNode
-        obj = new(Deque{Tuple{T,T,Bool}}())
-        push!(obj.stack, (p, q, false))
-
-        return obj
-    end
-end # struct PostorderIteratorState
-
-@inline function _iterate(state::PostorderIteratorState)
-    isempty(state.stack) && return nothing
-    p, q, marked = pop!(state.stack)
-    while ! marked
-        push!(state.stack, (p, q, true))
-        for link ∈ q.links
-            link.to == p && continue
-            push!(state.stack, (q, link.to, false))
-        end
-        p, q, marked = pop!(state.stack)
-    end
-
-    return ((p, q), state)
-end # function iterate
+preorder(p::AbstractNode, q::AbstractNode) = PreorderIterator(p, q)
+preorder(p::AbstractNode) = PreorderIterator(p, p)
+preorder(t::AbstractTree) = PreorderIterator(t.start, t.start)
 
 ## Hooks to the Base iterator interface ####
 
-Base.IteratorSize(iter::PostorderIterator) = Base.SizeUnknown()
-Base.IteratorEltype(iter::PostorderIterator) = Base.HasEltype()
-Base.eltype(iter::PostorderIterator{T}) where T = Tuple{T,T}
+Base.IteratorSize(iter::PreorderIterator) = Base.HasLength()
+Base.IteratorEltype(iter::PreorderIterator) = Base.HasEltype()
+Base.eltype(iter::PreorderIterator{T}) where T = Tuple{T,T}
 
-Base.iterate(iter::PostorderIterator{T}) where T = 
-    _iterate(PostorderIteratorState{T}(iter.start...))
-
-Base.iterate(iter::PostorderIterator, state::PostorderIteratorState) =
-    _iterate(state)
+Base.length(iter::PreorderIterator) = length(iter.list)
+Base.iterate(iter::PreorderIterator, state::Int = 1) =
+    state > iter.n ? nothing : (iter.list[state], state + 1)
 
 #####################
 #
-# Postorder iterator
+# Postorder vector
 #
 #####################
 
@@ -187,3 +114,46 @@ function postorder_vector(p::AbstractNode, q::AbstractNode)
 end
 postorder_vector(p::AbstractNode) = postorder_vector(p, p)
 postorder_vector(t::AbstractTree) = postorder_vector(t.start)
+
+#####################
+#
+# Postorder iterator
+#
+#####################
+
+function _gather_postorder(list::Vector{Tuple{T,T}}, p::T, q::T) where T <: AbstractNode
+    for link in Iterators.reverse(q.links)
+        link.to == p && continue
+        _gather_postorder(list, q, link.to)
+    end
+    push!(list, (p, q))
+
+    return list
+end
+
+struct PostorderIterator{T <: AbstractNode}
+    list::Vector{Tuple{T,T}}
+    n::Int
+
+    function PostorderIterator(p::T, q::T) where T <: AbstractNode
+        p == q ||
+            areneighbours(p, q) ||
+            throw(InvalidTopology("the nodes must be neighbours."))
+        list = _gather_postorder(Vector{Tuple{T,T}}(), p, q)
+        new{T}(list, length(list))
+    end
+end
+
+postorder(p::AbstractNode, q::AbstractNode) = PostorderIterator(p, q)
+postorder(p::AbstractNode) = PostorderIterator(p, p)
+postorder(t::AbstractTree) = PostorderIterator(t.start, t.start)
+
+## Hooks to the Base iterator interface ####
+
+Base.IteratorSize(iter::PostorderIterator) = Base.HasLength()
+Base.IteratorEltype(iter::PostorderIterator) = Base.HasEltype()
+Base.eltype(iter::PostorderIterator{T}) where T = Tuple{T,T}
+
+Base.length(iter::PostorderIterator) = length(iter.list)
+Base.iterate(iter::PostorderIterator, state::Int = 1) =
+    state > iter.n ? nothing : (iter.list[state], state + 1)
