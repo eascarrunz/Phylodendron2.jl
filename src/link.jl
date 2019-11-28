@@ -53,13 +53,14 @@ end # function unlink!
 
 
 """
-    graft!(p, q, r; prop_brlengths=(0.5, 0.5))
     graft!(p, q, r; prop_brlength=0.5)
+    graft!(p, q, r, branch_pq, branch_qr)
 
 Insert node `p` between the nodes `q` and `r`, where `q` and `r` are neighbours.
 
-The length of the branch between `q` and `r` is redistributed between the new branches (between `p` and `q` and between `q` and `r`), in accordance to the tuple of proportions given with the optional keyword parameter `prop_brlengths`.
-TODO: Complete with the second method.
+The length of the branch between `q` and `r` is redistributed between the new branches (between `p` and `q` and between `q` and `r`) according to the `prop_brlength` parameter, which gives the proportion of the length of the branch between `q` and `r` that is to be assigned to the branch between `p` and `q`. The branch between `q` and `r` is assigned the remainder of the original branch length.
+
+Alternatively, branch objects can be passed to be used as the new branches.
 """
 function graft!(
     p::AbstractNode, 
@@ -99,7 +100,7 @@ end # function graft!
 
 
 """
-    pluck!(p, q, r [, contructor])
+    pluck!(p, q, r [, constructor])
 
 Disconnect node `p` from its neighbours `q` and `r`, and connect `q` and `r` to each other. An 
 """
