@@ -54,8 +54,8 @@ end
 
 function clear_bipartitions!(tree)
 	nullbp = Bipartition([false])
-	for link in tree.start.links
-		_clear_bipartitions!(tree.start, link.to, nullbp)
+	for link in tree.origin.links
+		_clear_bipartitions!(tree.origin, link.to, nullbp)
 	end
 
 	return nothing

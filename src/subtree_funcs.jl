@@ -15,7 +15,7 @@ Count the nodes in a tree or subtree denoted by the nodes `p` and `q`.
 """
 n_node(p::AbstractNode, q::AbstractNode) = _n_node!(0, p, q)
 n_node(p::AbstractNode) = n_node(p, p)
-n_node(tree::AbstractTree) = n_node(tree.start)
+n_node(tree::AbstractTree) = n_node(tree.origin)
 
 function _n_tip!(num::Int, p::AbstractNode, q::AbstractNode)
 	for link in q.links
@@ -34,7 +34,7 @@ Count the tip nodes in a tree or subtree denoted by the nodes `p` and `q`.
 """
 n_tip(p::AbstractNode, q::AbstractNode) = _n_tip!(0, p, q)
 n_tip(p::AbstractNode) = n_tip(p, p)
-n_tip(tree::AbstractTree) = n_tip(tree.start)
+n_tip(tree::AbstractTree) = n_tip(tree.origin)
 
 """
 	n_branch(tree)
@@ -44,7 +44,7 @@ Count the branches in a `tree` or subtree denoted by the nodes `p` and `q`.
 """
 n_branch(p::AbstractNode, q::AbstractNode) = n_node(p, q) - 1
 n_branch(p::AbstractNode) = n_branch(p, p)
-n_branch(tree::AbstractTree) = n_branch(tree.start)
+n_branch(tree::AbstractTree) = n_branch(tree.origin)
 
 
 function _nodelabels!(labs::Vector{String}, p::AbstractNode, q::AbstractNode)
@@ -65,7 +65,7 @@ Get the labels all the nodes (in preorder) in a `tree` or subtree denoted by the
 """
 nodelabels(p::AbstractNode, q::AbstractNode) = _nodelabels!(String[], p, q)
 nodelabels(p::AbstractNode) = nodelabels(p, p)
-nodelabels(tree::AbstractTree) = nodelabels(tree.start)
+nodelabels(tree::AbstractTree) = nodelabels(tree.origin)
 
 function _tiplabels!(labs::Vector{String}, p::AbstractNode, q::AbstractNode)
 	istip(q) && push!(labs, label(q))
@@ -85,7 +85,7 @@ Get the labels all the tip nodes (in preorder) in a `tree` or subtree denoted by
 """
 tiplabels(p::AbstractNode, q::AbstractNode) = _tiplabels!(String[], p, q)
 tiplabels(p::AbstractNode) = tiplabels(p, p)
-tiplabels(tree::AbstractTree) = tiplabels(tree.start)
+tiplabels(tree::AbstractTree) = tiplabels(tree.origin)
 
 function _bipartitions(list::Vector{Bipartition}, p::AbstractNode, q::AbstractNode)
 	for link in q.links
@@ -116,7 +116,7 @@ Get a list of all the tip nodes (in preorder) in a `tree` or subtree denoted by 
 """
 tips(p::T, q::T) where T <: AbstractNode = _tips!(T[], p, q)
 tips(p::AbstractNode) = tips(p, p)
-tips(tree::AbstractTree) = tips(tree.start)
+tips(tree::AbstractTree) = tips(tree.origin)
 
 
 """
@@ -128,7 +128,7 @@ Get all the bipartitions (in preorder) of a `tree` or subtree denoted by the nod
 bipartitions(p::AbstractNode, q::AbstractNode) =
 	_bipartitions(Bipartition[], p, q)
 bipartitions(p::AbstractNode) = bipartitions(p, p)
-bipartitions(tree::AbstractTree) = bipartitions(tree.start)
+bipartitions(tree::AbstractTree) = bipartitions(tree.origin)
 
 function _getspecies!(list::Vector{Int}, p::AbstractNode, q::AbstractNode)
 	push!(list, q.species)
@@ -147,7 +147,7 @@ end
 Get the species numbers of all the nodes (in preorder) of a `tree` or subtree denoted by the nodes `p` and `q`.
 """
 getspecies(p::AbstractNode, q::AbstractNode) = _getspecies!(Int[], p, q)
-getspecies(tree::AbstractTree) = getspecies(tree.start, tree.start)
+getspecies(tree::AbstractTree) = getspecies(tree.origin, tree.origin)
 
 
 function _find_nonsplitting!(list::NodeVector, p::AbstractNode, q::AbstractNode)
@@ -169,4 +169,4 @@ Get a list of non-splitting internal nodes in a `tree` or subtree denoted by the
 find_nonsplitting(p::AbstractNode, q::AbstractNode) = 
 	_find_nonsplitting!(NodeVector(), p, q)
 find_nonsplitting(p::AbstractNode) = find_nonsplitting(p, p)
-find_nonsplitting(tree::AbstractTree) = find_nonsplitting(tree.start)
+find_nonsplitting(tree::AbstractTree) = find_nonsplitting(tree.origin)

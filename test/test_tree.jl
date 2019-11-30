@@ -171,11 +171,11 @@ end
 @testset "Find nodes" begin
     origin!(tree, a)
     @test findfirst(x -> label(x) == "F", tree) == f
-    @test findfirst(x -> label(x) == "F", tree.start) == f
+    @test findfirst(x -> label(x) == "F", tree.origin) == f
     @test isnothing(findfirst(x -> label(x) == "W", tree))
     @test findfirst(istip, d, e) == g
     @test findall(x -> label(x) == "F", tree) == [f]
-    @test findall(x -> label(x) == "F", tree.start) == [f]
+    @test findall(x -> label(x) == "F", tree.origin) == [f]
     @test isempty(findall(x -> label(x) == "W", tree))
     @test findall(istip, d, e) == [g, h, k, l, m]
 end

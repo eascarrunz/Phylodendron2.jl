@@ -231,7 +231,7 @@ newick_string(p::AbstractNode)::String = _newick_substring_origin(p) * ";"
 Return the Newick representation of tree `t`.
 """
 newick_string(t::AbstractTree)::String =
-    _newick_substring_origin(t.start) * ";"
+    _newick_substring_origin(t.origin) * ";"
 
 """
     write_newick(filename::AbstractString, t::Union{Tree,TreeVector}; append::Bool=false)

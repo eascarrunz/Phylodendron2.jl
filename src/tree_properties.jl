@@ -22,7 +22,7 @@ end
 Set `node` as the root of a `tree`.
 """
 function root!(tree::AbstractTree, p::AbstractNode)
-	tree.start = p
+	tree.origin = p
 	root!(tree)
 
 	return nothing
@@ -44,7 +44,7 @@ end
 
 Return the "origin" of a `tree`: The node that serves as the default point of entry to the tree.
 """
-origin(tree::AbstractTree) = tree.start
+origin(tree::AbstractTree) = tree.origin
 
 """
 	origin!(tree, node)
@@ -52,7 +52,7 @@ origin(tree::AbstractTree) = tree.start
 Set `node` as the "origin" of `tree`. The origin of the tree serves as a "pseudoroot": the default point of entry to the tree.
 """
 function origin!(tree::AbstractTree, p::AbstractNode)
-	tree.start = p
+	tree.origin = p
 end
 
 """
@@ -115,4 +115,4 @@ function _setspecies!(p::AbstractNode, q::AbstractNode, dir::SpeciesDirectory)
 end
 
 setspecies!(tree::AbstractTree, dir::SpeciesDirectory) =
-	_setspecies!(tree.start, tree.start, dir)
+	_setspecies!(tree.origin, tree.origin, dir)

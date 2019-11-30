@@ -53,7 +53,7 @@ function Node(l::String)
 end # function Node
 
 mutable struct Tree <: AbstractTree
-    start::AbstractNode
+    origin::AbstractNode
     label::String
     rooted::Bool
     annotations::Dict{String,Any}

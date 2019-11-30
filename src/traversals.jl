@@ -24,7 +24,7 @@ end
 
 Get a vector with the nodes of `tree` in preorder.
 
-The traversal is initiated either from the default start node of the tree, or from an arbitrary node `p`. Subtrees can be traversed by giving the nodes `p` and `q` to define the stem.
+The traversal is initiated either from the default origin node of the tree, or from an arbitrary node `p`. Subtrees can be traversed by giving the nodes `p` and `q` to define the stem.
 """
 function preorder_vector(p::AbstractNode, q::AbstractNode)
     p == q ||
@@ -35,7 +35,7 @@ function preorder_vector(p::AbstractNode, q::AbstractNode)
     return _prevec!(v, p, q)
 end
 preorder_vector(p::AbstractNode) = preorder_vector(p, p)
-preorder_vector(t::AbstractTree) = preorder_vector(t.start)
+preorder_vector(t::AbstractTree) = preorder_vector(t.origin)
 
 #####################
 #
@@ -68,7 +68,7 @@ end
 
 preorder(p::AbstractNode, q::AbstractNode) = PreorderIterator(p, q)
 preorder(p::AbstractNode) = PreorderIterator(p, p)
-preorder(t::AbstractTree) = PreorderIterator(t.start, t.start)
+preorder(t::AbstractTree) = PreorderIterator(t.origin, t.origin)
 
 ## Hooks to the Base iterator interface ####
 
@@ -102,7 +102,7 @@ end
 
 Get a vector with the nodes of `tree` in postorder.
 
-The traversal is initiated either from the default start node of the tree, or from an arbitrary node `p`. Subtrees can be traversed by giving the nodes `p` and `q` to define the stem.
+The traversal is initiated either from the default origin node of the tree, or from an arbitrary node `p`. Subtrees can be traversed by giving the nodes `p` and `q` to define the stem.
 """
 function postorder_vector(p::AbstractNode, q::AbstractNode)
     p == q ||
@@ -113,7 +113,7 @@ function postorder_vector(p::AbstractNode, q::AbstractNode)
     return _postvec!(v, p, q)
 end
 postorder_vector(p::AbstractNode) = postorder_vector(p, p)
-postorder_vector(t::AbstractTree) = postorder_vector(t.start)
+postorder_vector(t::AbstractTree) = postorder_vector(t.origin)
 
 #####################
 #
@@ -146,7 +146,7 @@ end
 
 postorder(p::AbstractNode, q::AbstractNode) = PostorderIterator(p, q)
 postorder(p::AbstractNode) = PostorderIterator(p, p)
-postorder(t::AbstractTree) = PostorderIterator(t.start, t.start)
+postorder(t::AbstractTree) = PostorderIterator(t.origin, t.origin)
 
 ## Hooks to the Base iterator interface ####
 

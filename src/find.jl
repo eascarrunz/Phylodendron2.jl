@@ -22,7 +22,7 @@ function Base.findfirst(f::Function, p::AbstractNode, q::AbstractNode)
 	return r == NULLNODE ? nothing : r
 end
 Base.findfirst(f::Function, p::AbstractNode) = findfirst(f, p, p)
-Base.findfirst(f::Function, tree::AbstractTree) = findfirst(f, tree.start)
+Base.findfirst(f::Function, tree::AbstractTree) = findfirst(f, tree.origin)
 
 function _findall(
 	f::Function, 
@@ -49,5 +49,5 @@ Return a vector of the nodes from a tree or subtree where `f(node)` returns `tru
 Base.findall(f::Function, p::AbstractNode, q::AbstractNode) = 
 	_findall(f, Vector{typeof(p)}(), p, q)
 Base.findall(f::Function, p::AbstractNode) = _findall(f, Vector{typeof(p)}(), p, p)
-Base.findall(f::Function, tree::AbstractTree) = _findall(f, Vector{typeof(tree.start)}(), tree.start, tree.start)
+Base.findall(f::Function, tree::AbstractTree) = _findall(f, Vector{typeof(tree.origin)}(), tree.origin, tree.origin)
 

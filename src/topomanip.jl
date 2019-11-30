@@ -23,9 +23,9 @@ function pluck_nonsplitting!(tree::AbstractTree)
 	targets = find_nonsplitting(tree)
 	isempty(targets) && return nothing
 	
-	neworigin = tree.start
-	if targets[1] == tree.start
-		neworigin = _find_neworigin(tree.start, tree.start, tree.start, tree.start)
+	neworigin = tree.origin
+	if targets[1] == tree.origin
+		neworigin = _find_neworigin(tree.origin, tree.origin, tree.origin, tree.origin)
 	end
 
 	for p in targets
@@ -33,7 +33,7 @@ function pluck_nonsplitting!(tree::AbstractTree)
 		pluck!(p, q, r)
 	end
 
-	tree.start = neworigin
+	tree.origin = neworigin
 
 	return nothing
 end
