@@ -24,7 +24,7 @@ function pluck_nonsplitting!(tree::AbstractTree)
 	isempty(targets) && return nothing
 	
 	neworigin = tree.origin
-	if firstindex(targets) == tree.origin
+	if targets[1] == tree.origin
 		neworigin = _find_neworigin(tree.origin, tree.origin, tree.origin, tree.origin)
 	end
 

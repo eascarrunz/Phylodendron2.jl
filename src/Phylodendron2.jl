@@ -7,7 +7,8 @@ There are redundant exports in this file because it is also used to keep track o
 module Phylodendron2
 
 using Random: randperm
-using DataStructures: Deque
+using DelimitedFiles: readdlm
+using PrettyTables
 
 include("exceptions.jl")
 
@@ -20,6 +21,12 @@ export
     length,
     rename!,
     SpeciesDirectory
+
+include("species_data.jl")
+export
+    read_species_data,
+    SpeciesDataMatrix,
+    write_phylip
 
 include("bipartition.jl")
 export
