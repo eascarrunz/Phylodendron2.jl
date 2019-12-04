@@ -258,9 +258,9 @@ function read_species_data(io::IO, T::Type, dir::SpeciesDirectory; addspecies=fa
     data = convert(Matrix{T}, inmat[:,2:end])
     newspp = setdiff(innames, dir.list)
     if addspecies
-        add!(dir, newspp)
+        addspecies!(dir, newspp)
     else
-        length(newspp) ≠ 0 && throw(MissingEntry("The file contains species missing from the species directory."))
+        length(newspp) ≠ 0 && throw(ErrorException("The file contains species missing from the species directory."))
     end
 
     return SpeciesDataMatrix{T}(data, dir, innames)

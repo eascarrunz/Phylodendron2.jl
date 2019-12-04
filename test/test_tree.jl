@@ -46,6 +46,8 @@ link!(r, t, 0.6063155522048979)
 =#
 
 tree = Tree(a)
+show(a)
+show(tree)
 
 @testset "Node properties" begin
     @test label(a) == "A"
@@ -62,6 +64,7 @@ tree = Tree(a)
 end
 
 @testset "Branch properties" begin
+    show(getbranch(a, b))
     @test brlabel(a, b) == ""
     brlabel!(a, b, "Branchiphoo")
     @test brlabel(a, b) == "Branchiphoo"
