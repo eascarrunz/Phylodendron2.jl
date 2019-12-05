@@ -146,21 +146,21 @@ function Base.show(io::IO, dm::SpeciesDataMatrix)
     return nothing
 end
 
-function Base.show(io::IO, dm::SpeciesDataMatrix{Float64}; digits::Int=4)
-    println(io, summary(dm))
-    k = size(dm, 2)
-    header = ["Species" collect(1:k)...]
-    aln = [:l,fill(:r, k)...]
-    pretty_table(
-        io, 
-        [dm.dir.list dm.data], 
-        header; 
-        alignment=aln, 
-        formatter=ft_printf("%5."*string(digits)*"f", collect(2:k+1))
-        )
+# function Base.show(io::IO, dm::SpeciesDataMatrix{Float64}; digits::Int=4)
+#     println(io, summary(dm))
+#     k = size(dm, 2)
+#     header = ["Species" collect(1:k)...]
+#     aln = [:l,fill(:r, k)...]
+#     pretty_table(
+#         io, 
+#         [dm.dir.list dm.data], 
+#         header; 
+#         alignment=aln, 
+#         formatter=ft_printf("%5."*string(digits)*"f", collect(2:k+1))
+#         )
 
-    return nothing
-end
+#     return nothing
+# end
 
 """
     write(io::IO, x::SpeciesDataMatrix)
