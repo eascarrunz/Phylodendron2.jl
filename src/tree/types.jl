@@ -56,11 +56,12 @@ mutable struct Tree <: AbstractTree
     origin::AbstractNode
     label::String
     rooted::Bool
+    dir::SpeciesDirectory
     annotations::Dict{String,Any}
     datablocks::Vector{AbstractTreeDataBlock}
 
     Tree(p::AbstractNode) =
-        new(p, "", false, Dict{String,Any}(), AbstractTreeDataBlock[])
+        new(p, "", false, SpeciesDirectory(), Dict{String,Any}(), AbstractTreeDataBlock[])
 end # struct Tree
 
 # mutable struct FixedTree

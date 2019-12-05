@@ -125,6 +125,14 @@ end
     @test_throws KeyError annotation(a, "Posterior probability")
 end
 
+@testset "Tree cloning" begin
+    tree2 = clone(tree)
+	@test tree ≢ tree2
+	@test newick_string(tree) == newick_string(tree2)
+	@test tree.origin ≢ tree2.origin
+	@test tree.rooted == tree2.rooted
+end
+
 @testset "Peek topology" begin
     @test n_neighbour(Node()) == 0
     @test neighbours(Node()) == Node[]

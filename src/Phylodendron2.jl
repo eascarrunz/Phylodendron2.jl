@@ -52,6 +52,10 @@ export
     Tree,
     TreeVector
 
+include("clone.jl")
+export
+    clone
+
 include("node_properties.jl")
 export
     annotate!,
@@ -63,7 +67,7 @@ export
     setspecies!
 
 include("find.jl")
-# exports methods fot findfirst and findall
+# exports methods for findfirst and findall
 
 include("peek_topology.jl")
 export
