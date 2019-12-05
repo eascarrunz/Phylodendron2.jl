@@ -173,8 +173,8 @@ Columns are delimited by white space. Species names are written in the first col
 function Base.write(io::IO, x::SpeciesDataMatrix)
     pretty_table(
         io, 
-        [x.dir.list x.data], 
-        borderless; 
+        [x.dir.list x.data]; 
+        tf = borderless, 
         noheader=true, 
         alignment=:l
         );
