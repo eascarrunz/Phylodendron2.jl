@@ -8,3 +8,9 @@ using Test
     include("newick.jl")
     include("randtree.jl")
 end
+
+@testset "BrownianModels" begin
+    using Phylodendron2.BrownianModels
+
+    include("BrownianModels/simulate.jl")
+end

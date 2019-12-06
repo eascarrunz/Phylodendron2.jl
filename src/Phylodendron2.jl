@@ -161,4 +161,6 @@ include("randtree.jl")
 export
     randtree
 
+include("BrownianModels/BrownianModels.jl")
+
 end # module Phylodendron2
