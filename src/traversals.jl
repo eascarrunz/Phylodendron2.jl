@@ -78,6 +78,9 @@ Base.length(iter::PreorderIterator) = length(iter.list)
 Base.iterate(iter::PreorderIterator, state::Int = 1) =
     state > iter.n ? nothing : (iter.list[state], state + 1)
 
+Base.firstindex(iter::PreorderIterator) = firstindex(iter.list)
+Base.lastindex(iter::PreorderIterator) = lastindex(iter.list)
+
 #####################
 #
 # Postorder vector
@@ -155,3 +158,6 @@ Base.eltype(iter::PostorderIterator{T}) where T = Tuple{T,T}
 Base.length(iter::PostorderIterator) = length(iter.list)
 Base.iterate(iter::PostorderIterator, state::Int = 1) =
     state > iter.n ? nothing : (iter.list[state], state + 1)
+
+Base.firstindex(iter::PostorderIterator) = firstindex(iter.list)
+Base.lastindex(iter::PostorderIterator) = lastindex(iter.list)
