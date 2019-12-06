@@ -114,5 +114,10 @@ function _setspecies!(p::AbstractNode, q::AbstractNode, dir::SpeciesDirectory)
 	end
 end
 
-setspecies!(tree::AbstractTree, dir::SpeciesDirectory) =
-	_setspecies!(tree.origin, tree.origin, dir)
+"""
+	setspecies!(tree [, species_directory])
+
+Set the species in `tree` by matching node labels to species names in the species directory of the tree.
+"""
+setspecies!(tree::AbstractTree) =
+	_setspecies!(tree.origin, tree.origin, tree.dir)

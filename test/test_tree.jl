@@ -103,7 +103,8 @@ end
     dir = SpeciesDirectory(tiplabels(tree))
     @test dir.list == tiplabels(tree)
     @test length(dir.dict) == length(dir.list)
-    setspecies!(tree, dir)
+    tree.dir = dir
+    setspecies!(tree)
 end
 
 @testset "Tree properties" begin
@@ -272,7 +273,8 @@ end
         Bipartition(BitArray([0, 0, 1, 1]))
         )
     dir = SpeciesDirectory(nodelabels(tree))
-    setspecies!(tree, dir)
+    tree.dir = dir
+    setspecies!(tree)
     compute_bipartitions!(tree, dir)
     v = falses(20)
     v[14:20] .= true
