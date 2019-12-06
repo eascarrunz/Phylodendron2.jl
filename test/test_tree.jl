@@ -97,6 +97,12 @@ end
     @test tiplabels(tree) == ["A", "G", "H", "K", "L", "M", "P", "Q", "S", "T"]
     @test find_nonsplitting(tree) == [b, d, j]
     @test tips(tree) == [a, g, h, k, l, m, p, q, s, t]
+    dir = SpeciesDirectory(tiplabels(tree))
+    tree.dir = dir
+    setspecies!(tree)
+    @test n_species(tree) == 10
+    @test n_species(c, n) == 4
+    @test n_species(c, b) == 1
 end
 
 @testset "Species directories" begin

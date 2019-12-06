@@ -46,6 +46,25 @@ n_branch(p::AbstractNode, q::AbstractNode) = n_node(p, q) - 1
 n_branch(p::AbstractNode) = n_branch(p, p)
 n_branch(tree::AbstractTree) = n_branch(tree.origin)
 
+function _n_species!(num::Int, p::AbstractNode, q::AbstractNode)
+	for link in q.links
+		link.to == p && continue
+		num = _n_species!(num, q, link.to)
+	end
+
+	return ifelse(q.species > 0, num + 1, num)
+end
+
+"""
+	n_species(tree)
+	n_species(p [, q])
+
+Count the species in a `tree` or subtree denoted by the nodes `p` and `q`.
+"""
+n_species(p::AbstractNode, q::AbstractNode) = _n_species!(0, p, q)
+n_species(p::AbstractNode) = n_species(p, p)
+n_species(tree::AbstractTree) = n_species(tree.origin)
+
 
 function _nodelabels!(labs::Vector{String}, p::AbstractNode, q::AbstractNode)
 	push!(labs, label(q))
@@ -53,7 +72,6 @@ function _nodelabels!(labs::Vector{String}, p::AbstractNode, q::AbstractNode)
 		link.to == p && continue
 		_nodelabels!(labs, q, link.to)
 	end
-
 	return labs
 end
 

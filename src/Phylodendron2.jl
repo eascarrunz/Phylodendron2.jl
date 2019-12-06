@@ -124,6 +124,7 @@ export
     getspecies,
     n_branch,
     n_node,
+    n_species,
     n_tip,
     nodelabels,
     tiplabels,
