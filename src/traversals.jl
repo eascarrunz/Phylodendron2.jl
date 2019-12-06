@@ -80,6 +80,7 @@ Base.iterate(iter::PreorderIterator, state::Int = 1) =
 
 Base.firstindex(iter::PreorderIterator) = firstindex(iter.list)
 Base.lastindex(iter::PreorderIterator) = lastindex(iter.list)
+Base.getindex(iter::PreorderIterator, inds...) = getindex(iter.list, inds...)
 
 #####################
 #
@@ -161,3 +162,4 @@ Base.iterate(iter::PostorderIterator, state::Int = 1) =
 
 Base.firstindex(iter::PostorderIterator) = firstindex(iter.list)
 Base.lastindex(iter::PostorderIterator) = lastindex(iter.list)
+Base.getindex(iter::PostorderIterator, inds...) = getindex(iter.list, inds...)
