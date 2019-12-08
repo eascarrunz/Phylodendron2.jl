@@ -1,15 +1,15 @@
-merge!(bdblk1::BranchDataBlock{T}, bdblk2::BranchDataBlock{T}) where T =
-	BranchDataBlock{T}()
+# merge!(bdblk1::BranchDataBlock{T}, bdblk2::BranchDataBlock{T}) where T =
+# 	BranchDataBlock{T}()
 
-function _init_datablocks!(tdblk::TreeDataBlock{T}, t::Tree) where T
-	push!(t.datablocks, tdblk)
-	tdblk = length(t.datablocks)
-	for (p, q) in PreorderIterator(t)
-		push!(q.datablocks, NodeDataBlock{T}())
-		p == q && continue
-		push!(getbranch(p, q), BranchDataBlock{T}())
-	end
-end
+# function _init_datablocks!(tdblk::TreeDataBlock{T}, t::Tree) where T
+# 	push!(t.datablocks, tdblk)
+# 	tdblk = length(t.datablocks)
+# 	for (p, q) in PreorderIterator(t)
+# 		push!(q.datablocks, NodeDataBlock{T}())
+# 		p == q && continue
+# 		push!(getbranch(p, q), BranchDataBlock{T}())
+# 	end
+# end
 
 """
 	delete_datablock!(tree, datablock)
@@ -21,7 +21,7 @@ The methods of this function accept either giving the `TreeDataBlock` object or 
 """
 function delete_datablock!(t::Tree, datablock::AbstractTreeDataBlock)
 	ind = datablock.ind
-s
+
 	for (p, q) in PreorderIterator(t)
 		deleteat!(q.datablocks, ind)
 		p == q && continue
@@ -37,4 +37,4 @@ s
 	return nothing
 end
 
-delete_datablock!(t::Tree, ind::Int) = delete_datablock!(t, t.datablocks[i])
+delete_datablock!(t::Tree, ind::Int) = delete_datablock!(t, t.datablocks[ind])

@@ -87,6 +87,10 @@ export
     brlength,
     brlength!
 
+include("datablocks/manipulation.jl")
+export
+    delete_datablock!
+
 include("tree_properties.jl")
 export
     annotate!,
