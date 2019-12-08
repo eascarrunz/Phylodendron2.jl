@@ -1,7 +1,7 @@
 merge!(bdblk1::BranchDataBlock{T}, bdblk2::BranchDataBlock{T}) where T =
 	BranchDataBlock{T}()
 
-function _init_data_blocks!(tdblk::TreeDataBlock{T}, t::Tree) where T
+function _init_datablocks!(tdblk::TreeDataBlock{T}, t::Tree) where T
 	push!(t.datablocks, tdblk)
 	tdblk = length(t.datablocks)
 	for (p, q) in PreorderIterator(t)
@@ -12,14 +12,14 @@ function _init_data_blocks!(tdblk::TreeDataBlock{T}, t::Tree) where T
 end
 
 """
-	delete_data_block!(tree, datablock)
-	delete_data_block!(tree, index)
+	delete_datablock!(tree, datablock)
+	delete_datablock!(tree, index)
 
 Delete a `datablock` from `tree`, including all its node data blocks and branch data blocks.
 
 The methods of this function accept either giving the `TreeDataBlock` object or its index in the `datablocks` array of `tree`.
 """
-function delete_data_block!(t::Tree, datablock::AbstractTreeDataBlock)
+function delete_datablock!(t::Tree, datablock::AbstractTreeDataBlock)
 	ind = datablock.ind
 s
 	for (p, q) in PreorderIterator(t)
@@ -37,4 +37,4 @@ s
 	return nothing
 end
 
-delete_data_block!(t::Tree, ind::Int) = delete_data_block!(t, t.datablocks[i])
+delete_datablock!(t::Tree, ind::Int) = delete_datablock!(t, t.datablocks[i])
