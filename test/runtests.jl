@@ -13,4 +13,5 @@ end
     using Phylodendron2.BrownianModels
 
     include("BrownianModels/simulate.jl")
+    include("BrownianModels/rel.jl")
 end

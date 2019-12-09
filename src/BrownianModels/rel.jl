@@ -1,10 +1,8 @@
 const LOG2π = log(2π)
 const INIT_V = 1.0
 
-using Phylodendron2
-
 struct RELBrownianTree <: AbstractTreeDataBlock
-	idx::Int
+	ind::Int
 	n_chars::Int
 	llh::Vector{Float64}
 end
@@ -74,7 +72,7 @@ function _init_model!(
 	
 	for link in q.links
 		link.to == p && continue
-		_init_model!(m, q, link.to, x, i=i)
+		_init_model!(m, q, link.to, x, copylength, i=i)
 		init_model!(m, link.branch, copylength, i=i)
 	end
 
@@ -162,7 +160,7 @@ function brownian_prune!(
 		br = q.links[1].branch
 		br.datablocks[i].vprune = br.datablocks[i].v
 
-		return nothing
+		return accllh
 	end
 
 	for link in q.links
@@ -265,7 +263,7 @@ function optimise_brownian_v_3c!(p::AbstractNode, i::Int)
     x₂= child₂.datablocks[i].xprune
     x₃= child₃.datablocks[i].xprune
 
-    k = p.models[i].treeblock.n_chars
+    k = p.datablocks[i].treeblock.n_chars
 
     kv̂₁ = sum((x₁ .- x₂) .* (x₁ .- x₃))
     kv̂₂ = sum((x₂ .- x₁) .* (x₂ .- x₃))
@@ -317,32 +315,30 @@ Optimise v in a tree
 function optimise_v!(tree::AbstractTree, i::Int; niter::Int=5)
 	@assert tree.datablocks[i] isa RELBrownianTree
 
-	for _ in 1:niter
-		visit_list = preorder_vector(tree)
-		old_p = visit_list[1]
-		j = 1
-		while istip(old_p)
-			j += 1
-			old_p = visit_list[j]
-		end
-		brownian_prune!(old_p, i)
-		optimise_brownian_v_3c!(old_p, i)
+	visit_list = preorder_vector(tree)
+	j = 1
+	while istip(visit_list[j])
 		j += 1
-		for p in visit_list[j:end]
-			istip(p) && continue
+	end
+	for _ in 1:niter
+		p = visit_list[j]
+		brownian_prune!(p, i, false)
+		optimise_brownian_v_3c!(p, i)
+		for q in visit_list[(j + 1):end]
+			istip(q) && continue
 			#=
-            The following loop works as a shortcut. Instead of prunning the entire tree anew, it only prunes the neighbours of the nodes along the path between the current node (`p`) and the node from the previous iteration (`old_p`) (Felsenstein 1981, p. 1238).
+            The following loop works as a shortcut. Instead of prunning the entire tree anew, it only prunes the neighbours of the nodes along the path between the current node (`q`) and the node from the previous iteration (`p`) (Felsenstein 1981, p. 1238).
 
             Finding the path between the two nodes is itself relatively costly, so this is likely only an improvement in big trees.
 			=#
-			for q in nodepath(old_p, p)[2:end]
-				child₁, child₂, child₃ = neighbours(q)
-				brownian_prune!(child₁, q, i)
-                brownian_prune!(child₂, q, i)
-                brownian_prune!(child₃, q, i)
+			for r in nodepath(p, q)[2:end]
+				child₁, child₂, child₃ = neighbours(r)
+				brownian_prune!(r, child₁, i, true)
+                brownian_prune!(r, child₂, i, true)
+                brownian_prune!(r, child₃, i, true)
 			end
-			optimise_brownian_v_3c!(p, i)
-			old_p = p
+			optimise_brownian_v_3c!(q, i)
+			p = q
 		end
 	end
 

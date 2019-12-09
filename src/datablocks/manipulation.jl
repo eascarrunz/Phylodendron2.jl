@@ -11,6 +11,25 @@
 # 	end
 # end
 
+
+function _delete_datablock!(p::AbstractNode, q::AbstractNode, ind::Int)
+	for link in q.links
+		link.to == p && continue
+		_delete_datablock!(q, link.to, ind)
+		deleteat!(link.branch.datablocks, ind)
+		for dblk in link.branch.datablocks[ind:end]
+			dblk.ind -= 1
+		end
+	end
+
+	deleteat!(q.datablocks, ind)
+	for dblk in q.datablocks[ind:end]
+		dblk.ind -= 1
+	end
+
+	return nothing
+end
+
 """
 	delete_datablock!(tree, datablock)
 	delete_datablock!(tree, index)
@@ -19,22 +38,19 @@ Delete a `datablock` from `tree`, including all its node data blocks and branch 
 
 The methods of this function accept either giving the `TreeDataBlock` object or its index in the `datablocks` array of `tree`.
 """
-function delete_datablock!(t::Tree, datablock::AbstractTreeDataBlock)
-	ind = datablock.ind
+function delete_datablock!(tree::Tree, ind::Int)
+	@assert 0 < ind ≤ length(tree.datablocks)
 
-	for (p, q) in PreorderIterator(t)
-		deleteat!(q.datablocks, ind)
-		p == q && continue
-		deleteat!(getbranch(p, q).datablocks, ind)
-	end
+	_delete_datablock!(tree.origin, tree.origin, ind)
 
-	deleteat!(t.datablocks, ind)
+	deleteat!(tree.datablocks, ind)
 
-	@inbounds for dblk in t.datablocks[ind:end]
+	@inbounds for dblk in tree.datablocks[ind:end]
 		dblk.ind -= 1
 	end
 
 	return nothing
 end
 
-delete_datablock!(t::Tree, ind::Int) = delete_datablock!(t, t.datablocks[ind])
+delete_datablock!(tree::Tree, datablock::AbstractTreeDataBlock) = 
+	delete_datablock!(t, datablock.ind)
