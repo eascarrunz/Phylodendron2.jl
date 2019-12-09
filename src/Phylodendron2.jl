@@ -87,6 +87,10 @@ export
     brlength,
     brlength!
 
+include("datablocks/manipulation.jl")
+export
+    delete_datablock!
+
 include("tree_properties.jl")
 export
     annotate!,
@@ -160,5 +164,7 @@ export
 include("randtree.jl")
 export
     randtree
+
+include("BrownianModels/BrownianModels.jl")
 
 end # module Phylodendron2
