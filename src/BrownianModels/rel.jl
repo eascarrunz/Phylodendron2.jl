@@ -369,3 +369,18 @@ function phylip_llh(tree::AbstractTree, i::Int)::Float64
 
 	return sum(m.llh) + (n_tip(tree) - 1) / 2 * m.n_chars * LOG2π
 end
+
+"""
+	brlength!(tree::AbstractTree, m::RELBrownianTree)
+
+Set the branch lengths of a tree from the branch length parameters of a Brownian model.
+"""
+function Phylodendron2.brlength!(tree::AbstractTree, m::RELBrownianTree)
+	i = m.ind
+	for (p, q) in preorder(tree)[2:end]
+		v = getbranch(p, q).datablocks[i].v
+		brlength!(p, q, v)
+	end
+
+	return nothing
+end

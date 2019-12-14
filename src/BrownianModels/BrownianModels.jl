@@ -8,6 +8,7 @@ export
 
 include("rel.jl")
 export
+	brlength!,
 	calc_llh!,
 	init_model!,
 	optimise_v!,
