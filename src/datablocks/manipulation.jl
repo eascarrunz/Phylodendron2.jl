@@ -23,9 +23,9 @@ function _delete_datablock!(p::AbstractNode, q::AbstractNode, ind::Int)
 	end
 
 	deleteat!(q.datablocks, ind)
-	for dblk in q.datablocks[ind:end]
-		dblk.ind -= 1
-	end
+	# for dblk in q.datablocks[ind:end]
+	# 	dblk.ind -= 1
+	# end
 
 	return nothing
 end
