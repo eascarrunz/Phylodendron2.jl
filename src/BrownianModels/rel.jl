@@ -333,9 +333,9 @@ function optimise_v!(tree::AbstractTree, i::Int; niter::Int=5)
 			=#
 			for r in nodepath(p, q)[2:end]
 				child₁, child₂, child₃ = neighbours(r)
-				brownian_prune!(r, child₁, i, true)
-                brownian_prune!(r, child₂, i, true)
-                brownian_prune!(r, child₃, i, true)
+				brownian_prune!(r, child₁, i, false; recursive = false)
+                brownian_prune!(r, child₂, i, false; recursive = false)
+                brownian_prune!(r, child₃, i, false; recursive = false)
 			end
 			optimise_brownian_v_3c!(q, i)
 			p = q
