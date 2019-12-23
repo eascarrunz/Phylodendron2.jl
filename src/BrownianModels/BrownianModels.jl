@@ -8,10 +8,10 @@ export
 
 include("rel.jl")
 export
-	brlength!,
+	v2brlength!,
 	calc_llh!,
 	init_model!,
-	optimise_v!,
+	optimv!,
 	phylip_llh
 
 end

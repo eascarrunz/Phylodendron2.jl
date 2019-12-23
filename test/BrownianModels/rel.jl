@@ -20,7 +20,7 @@ llhlist = readdlm("../data/BrownianModels/llh_phylip.txt", header=true)[1];
 		@test ≈(llh_fixedv, calc_llh!(tree, 1))
 
 		init_model!(tree, dm, false)
-		optimise_v!(tree, 2, niter = 5)
+		optimv!(tree, 2, niter = 5)
 		llh_optimv = calc_llh!(tree, 2)
 		@test llh_optimv ≥ llh_fixedv
 		if ! isnan(ref_llh_optimv)
