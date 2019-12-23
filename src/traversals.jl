@@ -23,6 +23,8 @@ end
 Get a vector with the nodes of `tree` in preorder.
 
 The traversal is initiated either from the default origin node of the tree, or from an arbitrary node `p`. Subtrees can be traversed by giving the nodes `p` and `q` to define the stem.
+
+See also: [`postorder`](@ref), [`postorder_vector`](@ref), [`preorder`](@ref)
 """
 function preorder_vector(p::AbstractNode, q::AbstractNode)
     p == q ||
@@ -51,36 +53,25 @@ function _gather_preorder(list::Vector{Tuple{T,T}}, p::T, q::T) where T <: Abstr
     return list
 end
 
-struct PreorderIterator{T <: AbstractNode}
-    list::Vector{Tuple{T,T}}
-    n::Int
+"""
+    preorder(tree)
+    preorder(p [, q])
 
-    function PreorderIterator(p::T, q::T) where T <: AbstractNode
-        p == q ||
-            areneighbours(p, q) ||
-            throw(InvalidTopology("the nodes must be neighbours."))
-        list = _gather_preorder(Vector{Tuple{T,T}}(), p, q)
-        new{T}(list, length(list))
-    end
+Get a vector of parent-child tuples with the nodes of `tree` in preorder.
+
+The traversal is initiated either from the default origin node of the tree, or from an arbitrary node `p`. Subtrees can be traversed by giving the nodes `p` and `q` to define the stem.
+
+See also: [`postorder`](@ref), [`postorder_vector`](@ref), [`preorder_vector`](@ref)
+"""
+function preorder(p::T, q::T) where T <: AbstractNode
+    p == q ||
+        areneighbours(p, q) ||
+        throw(InvalidTopology("the nodes must be neighbours."))
+    
+    return _gather_preorder(Vector{Tuple{T,T}}(), p, q)
 end
-
-preorder(p::AbstractNode, q::AbstractNode) = PreorderIterator(p, q)
-preorder(p::AbstractNode) = PreorderIterator(p, p)
-preorder(t::AbstractTree) = PreorderIterator(t.origin, t.origin)
-
-## Hooks to the Base iterator interface ####
-
-Base.IteratorSize(iter::PreorderIterator) = Base.HasLength()
-Base.IteratorEltype(iter::PreorderIterator) = Base.HasEltype()
-Base.eltype(iter::PreorderIterator{T}) where T = Tuple{T,T}
-
-Base.length(iter::PreorderIterator) = length(iter.list)
-Base.iterate(iter::PreorderIterator, state::Int = 1) =
-    state > iter.n ? nothing : (iter.list[state], state + 1)
-
-Base.firstindex(iter::PreorderIterator) = firstindex(iter.list)
-Base.lastindex(iter::PreorderIterator) = lastindex(iter.list)
-Base.getindex(iter::PreorderIterator, inds...) = getindex(iter.list, inds...)
+preorder(p::AbstractNode) = preorder(p, p)
+preorder(t::AbstractTree) = preorder(t.origin, t.origin)
 
 #####################
 #
@@ -105,6 +96,8 @@ end
 Get a vector with the nodes of `tree` in postorder.
 
 The traversal is initiated either from the default origin node of the tree, or from an arbitrary node `p`. Subtrees can be traversed by giving the nodes `p` and `q` to define the stem.
+
+See also: [`postorder`](@ref), [`preorder`](@ref), [`preorder_vector`](@ref)
 """
 function postorder_vector(p::AbstractNode, q::AbstractNode)
     p == q ||
@@ -133,33 +126,23 @@ function _gather_postorder(list::Vector{Tuple{T,T}}, p::T, q::T) where T <: Abst
     return list
 end
 
-struct PostorderIterator{T <: AbstractNode}
-    list::Vector{Tuple{T,T}}
-    n::Int
+"""
+    postorder(tree)
+    postorder(p [, q])
 
-    function PostorderIterator(p::T, q::T) where T <: AbstractNode
-        p == q ||
-            areneighbours(p, q) ||
-            throw(InvalidTopology("the nodes must be neighbours."))
-        list = _gather_postorder(Vector{Tuple{T,T}}(), p, q)
-        new{T}(list, length(list))
-    end
+Get a vector of parent-child tuples with the nodes of `tree` in postorder.
+
+The traversal is initiated either from the default origin node of the tree, or from an arbitrary node `p`. Subtrees can be traversed by giving the nodes `p` and `q` to define the stem.
+
+See also: [`postorder_vector`](@ref), [`preorder`](@ref), [`preorder_vector`](@ref)
+"""
+function postorder(p::T, q::T) where T <: AbstractNode
+    p == q ||
+        areneighbours(p, q) ||
+        throw(InvalidTopology("the nodes must be neighbours."))
+    
+    return _gather_postorder(Vector{Tuple{T,T}}(), p, q)
 end
+postorder(p::AbstractNode) = postorder(p, p)
+postorder(t::AbstractTree) = postorder(t.origin, t.origin)
 
-postorder(p::AbstractNode, q::AbstractNode) = PostorderIterator(p, q)
-postorder(p::AbstractNode) = PostorderIterator(p, p)
-postorder(t::AbstractTree) = PostorderIterator(t.origin, t.origin)
-
-## Hooks to the Base iterator interface ####
-
-Base.IteratorSize(iter::PostorderIterator) = Base.HasLength()
-Base.IteratorEltype(iter::PostorderIterator) = Base.HasEltype()
-Base.eltype(iter::PostorderIterator{T}) where T = Tuple{T,T}
-
-Base.length(iter::PostorderIterator) = length(iter.list)
-Base.iterate(iter::PostorderIterator, state::Int = 1) =
-    state > iter.n ? nothing : (iter.list[state], state + 1)
-
-Base.firstindex(iter::PostorderIterator) = firstindex(iter.list)
-Base.lastindex(iter::PostorderIterator) = lastindex(iter.list)
-Base.getindex(iter::PostorderIterator, inds...) = getindex(iter.list, inds...)
