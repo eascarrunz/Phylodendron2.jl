@@ -121,6 +121,10 @@ export
     preorder,
     preorder_vector
 
+include("ladderise.jl")
+export
+    ladderise!
+
 include("subtree_funcs.jl")
 export
     bipartitions,
