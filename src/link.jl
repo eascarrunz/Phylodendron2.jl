@@ -28,27 +28,21 @@ link!(p::AbstractNode, q::AbstractNode, length::Float64) =
 Dissociate the nodes `p` and `q` and return the branch that was connecting them.
 """
 function unlink!(p::AbstractNode, q::AbstractNode)
-    p ≡ q && throw(InvalidTopology("`p` and `q` are the same node"))
-    p2q, q2p = 0, 0
-    @inbounds for (i, link) in enumerate(p.links)
+    for (i, link) in enumerate(p.links)
         if link.to ≡ q
-            p2q = i
-            break
-        end
-    end
-    p2q == 0 && throw(InvalidTopology("the link from `p` to `q` is missing"))
-    @inbounds for (i, link) in enumerate(q.links)
-        if link.to ≡ p
-            q2p = i
-            break
-        end
-    end
-    q2p == 0 && throw(InvalidTopology("the link from `q` to `p` is missing"))
-    @inbounds br = p.links[p2q].branch
-    deleteat!(p.links, p2q)
-    deleteat!(q.links, q2p)
+            for (j, link) in enumerate(q.links)
+                if link.to ≡ p
+                    @inbounds br = p.links[i].branch
+                    deleteat!(p.links, i)
+                    deleteat!(q.links, j)
 
-    return br
+                    return br
+                end
+            end
+        end
+    end
+
+    throw(InvalidTopology("the two nodes are not linked."))
 end # function unlink!
 
 
