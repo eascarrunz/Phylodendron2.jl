@@ -1,6 +1,10 @@
 Base.print(io::IO, bp::Bipartition) = print(io, mapreduce(x -> x ? "●" : "○", *, bp.v))
 
-Base.:(==)(a::Bipartition, b::Bipartition) = (a.v == b.v)
+function Base.:(==)(a::Bipartition, b::Bipartition)
+	cv1, cv2 = .! a.v, .! b.v
+
+	return (a.v == b.v) || (a.v == cv2) || (cv1 == b.v) || (cv1 == cv2)
+end
 
 Base.show(io::IO, bp::Bipartition) = print(io, string(bp))
 
