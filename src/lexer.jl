@@ -25,13 +25,13 @@ end
 Return the current token in the lexer without taking it out from the lexer.
 """
 function peektoken(lxr::Lexer)::Union{Token,Nothing}
-    lxr.next_token != nothing && return lxr.next_token
+    isnothing(lxr.next_token) || return lxr.next_token
     length(lxr.input) == 0 && return nothing
     m = nothing
 
     for (defname, defregex) in lxr.tokendefs
         m = match(defregex, lxr.input)
-        if m != nothing
+        if ! isnothing(m)
             lxr.next_token = Token(defname, convert(String, m.match))
             return lxr.next_token
         end
@@ -49,10 +49,9 @@ function next!(lxr::Lexer)::Token
     if isnothing(token)
         token = peektoken(lxr)
     end
-    if isnothing(token)
-        return nothing
-    else
-        lxr.input = lxr.input[length(token.value) + 1 : end]
+    if ! isnothing(token)
+        # lxr.input = lxr.input[length(token.value) + 1 : end]
+        lxr.input = lxr.input[nextind(lxr.input, lastindex(token.value)):end]
         lxr.next_token = nothing
     end
 

@@ -237,6 +237,13 @@ end
     end
 end
 
+@testset "Newick trees with emoji" begin
+    text_tree = "((((🐇,🐳),(🐍:12.0,🐢)),🐠),🐌);"
+    tree = parse_newick(text_tree)
+
+    @test text_tree == newick_string(tree)
+end
+
 # tree = read_newick("../../data/snouters.nwk")
 # trees = read_newick("trees/wikipedia.nwk")
 
