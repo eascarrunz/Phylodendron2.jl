@@ -18,7 +18,7 @@ Rearrange the links in each node of `tree` so that bigger subtrees are always to
 
 Left and right orientations are relative to the origin node of the tree.
 """
-function ladderise!(tree::AbstractTree, sense::Symbol=:right)
+function ladderise!(tree::AbstractTree; sense=:right)
 	if sense == :right
 		_ladderise!(tree.origin, tree.origin, false)
 	elseif sense == :left
