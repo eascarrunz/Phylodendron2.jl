@@ -6,8 +6,8 @@ abstract type AbstractTree end
 abstract type AbstractNode end
 abstract type AbstractBranch end
 
-const NodeVector = Vector{AbstractNode}
-const TreeVector = Vector{AbstractTree}
+const NodeVector = Vector{N} where N <: AbstractNode
+const TreeVector = Vector{T} where T <: AbstractTree
 
 struct NodeLink
     to::AbstractNode
