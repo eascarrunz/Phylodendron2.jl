@@ -221,17 +221,17 @@ end
 @testset "Reading from file" begin
     @testset "Default settings" begin
         trees = read_newick("../data/snouters.nwk")
-        @test typeof(trees) == TreeVector
+        @test typeof(trees) <: TreeVector
         @test length(trees) == 1
         @test n_tip(trees[1]) == 10
         trees = read_newick("../data/wikipedia.nwk")
-        @test typeof(trees) == TreeVector
+        @test typeof(trees) <: TreeVector
         @test length(trees) == 14
         @test n_tip(trees[1]) == 4
     end
     @testset "n hint too low" begin
         trees = read_newick("../data/wikipedia.nwk"; nhint=1)
-        @test typeof(trees) == TreeVector
+        @test typeof(trees) <: TreeVector
         @test length(trees) == 14
         @test n_tip(trees[1]) == 4
     end

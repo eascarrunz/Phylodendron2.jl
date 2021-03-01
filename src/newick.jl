@@ -134,9 +134,9 @@ Read trees in Newick format from a file.
 
 Performance with large files can be improved by adjusting the `nhint` value to the approximate number of trees in the file (1000 by default).
 """
-function read_newick(filename::AbstractString; nhint::Int=1000)::Vector{AbstractTree}
+function read_newick(filename::AbstractString; nhint::Int=1000)::TreeVector
     file = open(filename)
-    intrees = Vector{AbstractTree}(undef, nhint)
+    intrees = Vector{Tree}(undef, nhint)
     treecount = 0
     notree = false
     while ! eof(file)

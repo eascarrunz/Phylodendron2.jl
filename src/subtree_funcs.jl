@@ -185,6 +185,6 @@ end
 Get a list of non-splitting internal nodes in a `tree` or subtree denoted by the nodes `p` and `q`. Non-splitting internal nodes are nodes with only two neighbours.
 """
 find_nonsplitting(p::AbstractNode, q::AbstractNode) = 
-	_find_nonsplitting!(NodeVector(), p, q)
+	_find_nonsplitting!(Vector{typeof(p)}(), p, q)
 find_nonsplitting(p::AbstractNode) = find_nonsplitting(p, p)
 find_nonsplitting(tree::AbstractTree) = find_nonsplitting(tree.origin)
