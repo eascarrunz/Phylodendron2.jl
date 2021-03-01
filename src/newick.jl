@@ -136,7 +136,7 @@ Performance with large files can be improved by adjusting the `nhint` value to t
 """
 function read_newick(filename::AbstractString; nhint::Int=1000)::TreeVector
     file = open(filename)
-    intrees = Vector{Tree}(undef, nhint)
+    intrees = Vector{AbstractTree}(undef, nhint)
     treecount = 0
     notree = false
     while ! eof(file)
@@ -168,6 +168,25 @@ function read_newick(filename::AbstractString; nhint::Int=1000)::TreeVector
 
     return intrees
 end
+
+"""
+    read_newick(text=<NEWICK>)
+
+Read trees in Newick format from a text string.
+"""
+function read_newick(;text::AbstractString)
+    textlines = split(text, ';'; keepempty=false)
+    ntrees = length(textlines)
+    trees = Vector{Tree}(undef, ntrees)
+
+    for (i, line) in enumerate(textlines)
+        tree = Tree(parse_newick(line * ';'))
+        trees[i] = tree
+    end
+
+    return trees
+end
+
 
 #==
     WRITING NEWICK STRINGS

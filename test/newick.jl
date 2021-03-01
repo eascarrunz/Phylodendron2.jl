@@ -237,6 +237,14 @@ end
     end
 end
 
+@testset "Reading trees from string" begin
+    text = [randtree(12) for _ in 1:20] .|> newick_string |> join
+    trees = read_newick(text=text)
+
+    @test length(trees) == 20
+    @test text == newick_string.(trees) |> join
+end
+
 @testset "Newick trees with emoji" begin
     text_tree = "((((🐇,🐳),(🐍:12.0,🐢)),🐠),🐌);"
     tree = parse_newick(text_tree)
