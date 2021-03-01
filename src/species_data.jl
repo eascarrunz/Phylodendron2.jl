@@ -174,7 +174,7 @@ function Base.write(io::IO, x::SpeciesDataMatrix)
     pretty_table(
         io, 
         [x.dir.list x.data]; 
-        tf = borderless, 
+        tf = tf_borderless, 
         noheader=true, 
         alignment=:l
         );
