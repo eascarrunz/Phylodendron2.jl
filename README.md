@@ -5,4 +5,4 @@
 
 A prototype package with basic functionality for working with phylogenetic trees. The basic tree data structure consists of reciprocally-linked neighbour nodes and is unrooted. Internal non-dichotomic nodes are supported.
 
-For a brief (and very incomplete!) overview of the features, check out this [Pluto notebook](hhttps://github.com/eascarrunz/Phylodendron2.jl/blob/master/notebooks/phylodendron_tour.jl). You will need to have [Julia](https://julialang.org/) and [Pluto](https://plutojl.org/) installed on your computer. Otherwise, you can see the notebook as a [static webpage](https://eascarrunz.github.io/web_scraps/phylodendron/tour_static.html).
+For a brief (and very incomplete!) overview of the features, check out this [Pluto notebook](https://github.com/eascarrunz/Phylodendron2.jl/blob/master/notebooks/phylodendron_tour.jl). You will need to have [Julia](https://julialang.org/) and [Pluto](https://plutojl.org/) installed on your computer. Otherwise, you can see the notebook as a [static webpage](https://eascarrunz.github.io/web_scraps/phylodendron/tour_static.html).
