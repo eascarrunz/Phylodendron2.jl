@@ -279,10 +279,10 @@ end
         Bipartition(BitArray([0, 0, 1, 1]))
         )
     dir = SpeciesDirectory(nodelabels(tree))
+    @test_throws Error compute_biparittions!(tree)
     tree.dir = dir
     setspecies!(tree)
-    compute_bipartitions!(tree, dir)
-    compute_biparittions!(tree)
+    compute_bipartitions!(tree)
     v = falses(20)
     v[14:20] .= true
     @test getbranch(c, n).bipart.v == v
