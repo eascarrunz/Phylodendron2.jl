@@ -51,7 +51,6 @@ end
 Compute the bipartitions of species (in internal or external nodes) in a tree. Use the `bipartitions` function to retreive the bipartitions after computing them.
 """
 function compute_biparittions!(tree::AbstractTree)
-	isnothing(tree.dir) && @error "the tree must have a species directory"
 
 	compute_bipartitions!(tree, tree.dir) # this should work
 

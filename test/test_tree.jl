@@ -279,7 +279,6 @@ end
         Bipartition(BitArray([0, 0, 1, 1]))
         )
     dir = SpeciesDirectory(nodelabels(tree))
-    @test_throws ErrorException compute_biparittions!(tree)
     tree.dir = dir
     setspecies!(tree)
     compute_bipartitions!(tree)
