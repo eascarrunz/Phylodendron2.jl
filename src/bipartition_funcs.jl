@@ -45,6 +45,11 @@ function compute_bipartitions!(tree::AbstractTree, dir::SpeciesDirectory)
 	return nothing
 end
 
+"""
+	compute_biparittions!(tree)
+
+Compute the bipartitions of species (in internal or external nodes) in a tree. Use the `bipartitions` function to retreive the bipartitions after computing them.
+"""
 function compute_biparittions!(tree::AbstractTree)
 	isnothing(tree.dir) && @error "the tree must have a species directory"
 
@@ -63,7 +68,11 @@ function _clear_bipartitions!(p::AbstractNode, q::AbstractNode, nullbp::Bipartit
 	return nothing
 end
 
+"""
+	clear_bipartitions!(tree)
 
+Remove the `Bipartition` objects attached to the branches of a `tree`.
+"""
 function clear_bipartitions!(tree)
 	nullbp = Bipartition([false])
 	for link in tree.origin.links
