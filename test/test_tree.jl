@@ -282,6 +282,7 @@ end
     tree.dir = dir
     setspecies!(tree)
     compute_bipartitions!(tree, dir)
+    compute_biparittions!(tree)
     v = falses(20)
     v[14:20] .= true
     @test getbranch(c, n).bipart.v == v

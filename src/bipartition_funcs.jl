@@ -45,11 +45,19 @@ function compute_bipartitions!(tree::AbstractTree, dir::SpeciesDirectory)
 	return nothing
 end
 
+function compute_biparittions!(tree::AbstractTree)
+	isnothing(tree.dir) && @error "the tree must have a species directory"
+
+	compute_biparittions!(tree, tree.dir)
+
+	return nothing
+end
+
 function _clear_bipartitions!(p::AbstractNode, q::AbstractNode, nullbp::Bipartition)
 	for link in q.links
 		link.to == p && continue
 		link.branch.bipart = nullbp
-		_clear_bipartitions!(q, link.to)
+		_clear_bipartitions!(q, link.to, nullbp)
 	end
 
 	return nothing
