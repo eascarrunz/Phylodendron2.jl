@@ -46,7 +46,7 @@ function compute_bipartitions!(tree::AbstractTree, dir::SpeciesDirectory)
 end
 
 """
-	compute_biparittions!(tree)
+	compute_bipartitions!(tree)
 
 Compute the bipartitions of species (in internal or external nodes) in a tree. Use the `bipartitions` function to retreive the bipartitions after computing them.
 """
