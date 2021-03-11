@@ -132,10 +132,10 @@ randtree(labels::Vector{String}, rooted::Bool = false) =
 
 Create a binary tree (un`rooted` by default) by the random addition of tips with the species from a species `dir`ectory.
 """
-randtree(dir::SpeciesDirectory, rooted::Bool = false) = 
-	randtree(
-		length(dir), 
-		rooted; 
-		labels = dir.list, 
-		species = collect(1:length(dir))
-		)
+function randtree(dir::SpeciesDirectory, rooted::Bool = false)
+	tree = 
+		randtree(length(dir), rooted; labels = dir.list, species = collect(1:length(dir)))
+	tree.dir = dir
+
+	return tree
+end
